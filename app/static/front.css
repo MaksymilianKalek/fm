@@ -180,6 +180,13 @@ body>div>nav {
 
     #catCard {
         margin-bottom: 40px;
+        width: 35rem;
+        height: 40.5rem;
+        transform: scale(0.95);
+    }
+
+    .card-img-top {
+        max-height: 30rem;
     }
 
 }
@@ -187,6 +194,15 @@ body>div>nav {
 @media only screen and (max-width: 768px) {
     #topLogo {
         transform: scale(0.8);
+    }
+
+    #catCard {
+        width: 30rem;
+        height: 36rem;
+    }
+
+    .card-img-top {
+        max-height: 25rem;
     }
 }
 
@@ -215,6 +231,25 @@ body>div>nav {
 
     #logo-row {
         height: 160px;
+    }
+
+    #catCard {
+        width: 25rem;
+        height: 36rem;
+        transform: scale(0.95);
+    }
+
+}
+
+@media only screen and (max-width: 460px) {
+    #catCard {
+        width: 25rem;
+        height: 32rem;
+        transform: scale(0.9);
+    }
+
+    .card-img-top {
+        max-height: 25rem;
     }
 }
 
