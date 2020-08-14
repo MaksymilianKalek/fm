@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="jumbotron" style="width: 50rem;" id="loginCard">
+    <img src="/static/fm_logo.png" class="card-img-top" alt="Logo Fabryki Mruczenia" id="output">
+
+    <form action="#" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Imię</label>
+            <input required type="text" class="form-control" name="name" id="name" placeholder="Imię Kotka">
+        </div>
+
+        <div class="form-group">
+            <label for="age">Wiek</label>
+            <input required type="number" min="1" class="form-control" name="age" id="age" placeholder="Wiek Kotka">
+            <br>
+            <select class="form-control" id="period" name="period">
+                <option>Rok</option>
+                <option>Miesiąc</option>
+                <option>Tydzień</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sex">Płeć kotka</label>
+            <select class="form-control" id="sex" name="sex">
+                <option>Kot</option>
+                <option>Kotka</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fur">Kolor</label>
+            <input required type="text" class="form-control" name="fur" id="fur" placeholder="Kolor Sierści Kotka">
+        </div>
+
+        <div class="form-group">
+            <label for="when_came">Kiedy Kotek trafił do fundacji</label>
+            <input required type="date" class="form-control" name="when_came" id="datePickerId"
+                placeholder="Od kiedy jest z nami">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Opisz kotka</label>
+            <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="currentlyOnMeds">Czy aktualnie jest w trakcie leczenia?</label>
+            <select class="form-control" id="currentlyOnMeds" name="currentlyOnMeds">
+                <option>Nie</option>
+                <option>Tak</option>
+            </select>
+        </div>
+
+        <h5>Wrzuć główne zdjęcie kotka</h5>
+
+        <div class="form-check">
+            <label class="form-check-label" for="picture">
+                <input type="file" name="picture" class="form-control-file" id="picture" name="picture" required
+                    accept="image/*" onchange="loadFile(event)">
+            </label>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="fur">Linki do albumu Google Photos</label>
+            <input required type="text" class="form-control" name="1photo" id="1photo" placeholder="1 zdjęcie">
+            <br>
+            <input required type="text" class="form-control" name="2photo" id="2photo" placeholder="2 zdjęcie">
+            <br>
+            <input required type="text" class="form-control" name="3photo" id="3photo" placeholder="3 zdjęcie">
+        </div>
+
+        <br>
+
+        <button type="submit" value="submit" class="btn btn-primary mt-3">Dodaj kotka</button>
+        <br>
+    </form>
+</div>
+
+<script>
+    let loadFile = function (event) {
+        let output = document.getElementById("output");
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+
+    datePickerId.max = new Date().toISOString().split("T")[0];
+</script>
+{% endblock %}

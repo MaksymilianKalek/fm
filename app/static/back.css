@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
+
+
+body {
+    background: rgb(255, 163, 32);
+    background: radial-gradient(circle, rgba(255, 163, 32, 1) 0%, rgba(215, 83, 40, 1) 100%);
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+}
+
+
+#loginCard>div>form>button {
+    background-color: #d35328;
+}
+
+#loginCard>a {
+    color: white;
+    background-color: #d35328;
+    border-radius: 10px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    padding-top: 7px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    text-decoration: none;
+}
+
+#loginCard>a:hover {
+    color: #d1d1d1;
+
+}
+
+#submit {
+    outline: none;
+    border: none;
+    background-color: #d35328;
+    color: white;
+    border-radius: 10px;
+    transform: scale(1.5);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+}
+
+#submit:hover {
+    color: #d1d1d1;
+}
+
+#loginCard>img {
+    max-width: 300px;
+    margin: auto;
+}
+
+#loginCard {
+    padding: 20px 20px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+}
+
+
+#loginCard>form>button {
+    background-color: #d35328;
+}
+
+
+#navbarTogglerDemo02>ul>li:nth-child(3)>a,
+#navbarDropdownMenuLink,
+#navbarTogglerDemo02>ul>li:nth-child(1)>a,
+body>nav>a {
+    color: white;
+    text-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item {
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+}
+
+button,
+img {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+#output {
+    box-shadow: none;
+    padding-bottom: 20px;
+}
+
+#loginCard>img {
+    box-shadow: none;
+    padding-bottom: 40px;
+}
+
+#loginCard>ul>li {
+    list-style-type: none;
+    margin: auto;
+    background-color: black;
+    text-align: center;
+    justify-content: center;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    margin-left: -20px;
+}
+
+#howManyCats {
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    background-color: white;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 1rem 1rem;
+}

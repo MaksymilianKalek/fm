@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row carousel-row no-gutters">
+
+	<div class="col-2"></div>
+
+	<div class="col-8 justify-content-center text-center">
+
+			<h3 id="howManyCats">Obecnie w tej kategorii mamy: {{ howManyCats }} kotów</h3>
+
+	</div>
+
+	<div class="col-2"></div>
+
+</div>
+
+{% if noCats %}
+
+<div class="row carousel-row no-gutters">
+
+	<div class="col-2"></div>
+
+	<div class="col-8 justify-content-center text-center">
+
+		<div class="jumbotron">
+			<h1 class="display-4 mb-5">Przepraszamy, żadne koty nie zostały znalezione</h1>
+			<hr class="my-4">
+			<a
+				href='{{ url_for("addCat") }}'><button
+					type="button" class="btn btn-outline-primary">Dodaj kota</button></a>
+
+			
+		</div>
+
+	</div>
+
+	<div class="col-2"></div>
+
+</div>
+
+
+{% endif %}
+
+{% for cat in cats %}
+
+<li class="list-group-item">
+	<div class="row justify-content-center">
+		<div class="col-md-3 align-self-center">
+			<h6 class="mt-2">{{ cat.id }}. Imię: {{ cat.name }}</h6>
+			<p class="mt-2">Wiek: {{ cat.age }} {{ cat.period }}</p>
+			<p class="mt-2">Płeć: {{ cat.sex }}</p>
+			<p class="mt-2">Sierść: {{ cat.fur }} </p>
+		</div>
+
+
+		<div class="col-md-3 align-self-center">
+			<p class="mt-2">Description: {{ cat.description }} </p>
+			<p class="mt-2">Czy jest kociakiem: {{ cat.isYoung }} </p>
+			<p class="mt-2">Gotowy do wyadoptowania: {{ cat.readyToBeAdopted }} </p>
+			<p class="mt-2">Czy jest w trakcie leczenia: {{ cat.currentlyOnMeds }} </p>
+		</div>
+
+		<div class="col-md-2 align-self-center">
+			<p class="mt-2">Kiedy trafił do fundacji: {{ cat.when_came }} </p>
+			<p class="mt-2">Ostatnio edytowany: {{ cat.timestamp }} </p>
+			{% if cat.isActive %}
+			<p class="mt-2">Obecnie w fundacji: <span style="color: green; font-weight: bold;">Tak</span> </p>
+			{% else %}
+			<p class="mt-2">Obecnie w fundacji: <span style="color: red; font-weight: bold;">Nie</span> </p>
+			{% endif %}
+		</div>
+
+		<div class="col-md-2 align-self-center">
+			<img src="../static/uploads/{{ cat.picture }}" alt="photo" width="100%" height="100%">
+		</div>
+
+		<div class="col-md-2 align-self-end text-right mb-5">
+			<a href="/update/{{ cat.id }}"><button type="submit" value="update"
+					class="btn btn-primary mt-4 mr-3">Edytuj</button></a>
+			<a href="/adopt/{{ cat.id }}"><button type="submit" class="btn btn-secondary mt-4 mr-3">Adoptuj</button></a>
+			<a href="#" id="deleteBtn{{ cat.id }}"><button onclick='let isSure = confirm("Na pewno chcesz usunąć trwale {{ cat.name }}?"); if (isSure) {
+						let catId = parseInt("{{ cat.id }}");
+						let deleteBtn = document.getElementById("deleteBtn{{ cat.id }}");
+						deleteBtn.href = "/delete/{{ cat.id }}";
+					}' class="btn btn-secondary mt-4 mr-3">Usuń</button></a>
+
+		</div>
+	</div>
+</li>
+<br><br>
+
+{% endfor %}
+
+
+
+{% endblock %}

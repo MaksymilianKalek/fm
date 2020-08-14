@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="jumbotron" style="width: 50rem;" id="loginCard">
+    <img src="../static/uploads/{{ cat.picture }}" class="card-img-top" alt="Logo Fabryki Mruczenia" id="output">
+
+    <form action="#" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Imię</label>
+            <input required type="text" class="form-control" name="name" id="name" value="{{ cat.name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="age">Wiek</label>
+            <input type="number" min="1" class="form-control" name="age" id="age" value="{{ cat.age }}">
+            <br>
+            <select class="form-control" id="period" name="period">
+                {% if cat.period == "Rok" %}
+                <option selected="selected">Rok</option>
+                <option>Miesiąc</option>
+                <option>Tydzień</option>
+                {% elif cat.period == "Miesiąc" %}
+                <option selected="selected">Miesiąc</option>
+                <option>Rok</option>
+                <option>Tydzień</option>
+                {% else %}
+                <option selected="selected">Tydzień</option>
+                <option>Miesiąc</option>
+                <option>Rok</option>
+                {% endif %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sex">Płeć kotka</label>
+            <select class="form-control" id="sex" name="sex">
+                {% if cat.sex == "Kot" %}
+                <option selected="selected">Kot</option>
+                <option>Kotka</option>
+                {% else %}
+                <option selected="selected">Kotka</option>
+                <option>Kot</option>
+                {% endif %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fur">Kolor</label>
+            <input required type="text" class="form-control" name="fur" id="fur" value="{{ cat.fur }}">
+        </div>
+
+        <div class="form-group">
+            <label for="when_came">Kiedy Kotek trafił do fundacji</label>
+            <input required type="date" class="form-control" name="when_came" id="when_came" value="{{ cat.when_came }}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Opisz kotka</label>
+            <textarea required class="form-control" id="description" rows="3" name="description">{{ cat.description }}</textarea>
+        </div>
+
+
+        <div class="form-group">
+            <label for="currentlyOnMeds">Czy aktualnie jest w trakcie leczenia?</label>
+            <select class="form-control" id="currentlyOnMeds" name="currentlyOnMeds">
+                {% if cat.currentlyOnMeds == True %}
+                <option selected="selected">Tak</option>
+                <option>Nie</option>
+                {% else %}
+                <option selected="selected">Nie</option>
+                <option>Tak</option>
+                {% endif %}
+            </select>
+        </div>
+
+        <h5>Wrzuć zdjęcie kotka</h5>
+
+        <div class="form-check">
+            <label class="form-check-label" for="picture">
+                <input type="file" name="picture" class="form-control-file" id="picture" name="picture" accept="image/*"
+                    onchange="loadFile(event)">
+            </label>
+        </div>
+        
+        <br>
+
+        <div class="form-group">
+            <label for="fur">Linki do albumu Google Photos</label>
+            <input required type="text" class="form-control" name="1photo" id="1photo" value="{{ cat.googlePhoto1 }}">
+            <br>
+            <input required type="text" class="form-control" name="2photo" id="2photo" value="{{ cat.googlePhoto2 }}">
+            <br>
+            <input required type="text" class="form-control" name="3photo" id="3photo" value="{{ cat.googlePhoto3 }}">
+        </div>
+
+        <br>
+
+        <button type="submit" value="submit" class="btn btn-primary mt-3">Edytuj kotka</button>
+        <br>
+    </form>
+</div>
+
+
+<script>
+    let loadFile = function (event) {
+        let output = document.getElementById("output");
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+{% endblock %}
