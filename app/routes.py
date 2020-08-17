@@ -79,10 +79,10 @@ def adopcja():
     title = "Fabryka Mruczenia - Adopcja"
     return render_template("adopcja.html", title=title)
 
-@app.route("/tymczas/")
+@app.route("/pomoc/")
 def tymczas(): 
-    title = "Fabryka Mruczenia - Dom tymczasowy"
-    return render_template("tymczas.html", title=title)
+    title = "Fabryka Mruczenia - Jak nam pomóc"
+    return render_template("pomoc.html", title=title)
 
 @app.route("/contact/")
 def contact():
