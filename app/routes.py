@@ -80,7 +80,7 @@ def adopcja():
     return render_template("adopcja.html", title=title)
 
 @app.route("/pomoc/")
-def tymczas(): 
+def pomoc(): 
     title = "Fabryka Mruczenia - Jak nam pomóc"
     return render_template("pomoc.html", title=title)
 
