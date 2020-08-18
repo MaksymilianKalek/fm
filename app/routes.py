@@ -281,6 +281,7 @@ def updateCat(id):
         if file and allowed_file(file.filename):
             file.filename = secure_filename(file.filename)
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
+            found_cat.picture = output
 
 
         if period == "Rok" and age >= 1:
