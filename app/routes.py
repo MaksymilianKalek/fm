@@ -152,9 +152,6 @@ def addCat():
         when_came = request.form["when_came"]
         description = request.form["description"]
         currentlyOnMeds = request.form["currentlyOnMeds"]
-        googlePhoto1 = request.form["1photo"]
-        googlePhoto2 = request.form["2photo"]
-        googlePhoto3 = request.form["3photo"]
         
         if currentlyOnMeds == "Tak":
             currentlyOnMeds = True
@@ -171,6 +168,21 @@ def addCat():
             file.filename = secure_filename(file.filename)
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
 
+        googlePhoto1 = request.files["1photo"]
+        if googlePhoto1 and allowed_file(googlePhoto1.filename):
+            googlePhoto1.filename = secure_filename(googlePhoto1.filename)
+            googlePhoto1URL = str(upload_file_to_s3(googlePhoto1, "fabrykamruczenia"))
+
+        googlePhoto2 = request.files["2photo"]
+        if googlePhoto2 and allowed_file(googlePhoto2.filename):
+            googlePhoto2.filename = secure_filename(googlePhoto2.filename)
+            googlePhoto2URL = str(upload_file_to_s3(googlePhoto2, "fabrykamruczenia"))
+        
+        googlePhoto3 = request.files["3photo"]
+        if googlePhoto3 and allowed_file(googlePhoto3.filename):
+            googlePhoto3.filename = secure_filename(googlePhoto3.filename)
+            googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
+
         if period == "Rok" and age >= 1:
             isYoung = False
         else:
@@ -181,7 +193,7 @@ def addCat():
         else:
             readyToBeAdopted = False
 
-        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=output, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhoto1, googlePhoto2=googlePhoto2, googlePhoto3=googlePhoto3)
+        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=output, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhoto1URL, googlePhoto2=googlePhoto2URL, googlePhoto3=googlePhoto3URL)
         db.session.add(cat)
         db.session.commit()
 
@@ -256,9 +268,6 @@ def updateCat(id):
         when_came = request.form["when_came"]
         description = request.form["description"]
         currentlyOnMeds = request.form["currentlyOnMeds"]
-        googlePhoto1 = request.form["1photo"]
-        googlePhoto2 = request.form["2photo"]
-        googlePhoto3 = request.form["3photo"]
 
         if currentlyOnMeds == "Tak":
             currentlyOnMeds = True
@@ -282,6 +291,24 @@ def updateCat(id):
             file.filename = secure_filename(file.filename)
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
             found_cat.picture = output
+
+        googlePhoto1 = request.files["1photo"]
+        if googlePhoto1 and allowed_file(googlePhoto1.filename):
+            googlePhoto1.filename = secure_filename(googlePhoto1.filename)
+            googlePhoto1URL = str(upload_file_to_s3(googlePhoto1, "fabrykamruczenia"))
+            found_cat.googlePhoto1 = googlePhoto1URL
+
+        googlePhoto2 = request.files["2photo"]
+        if googlePhoto2 and allowed_file(googlePhoto2.filename):
+            googlePhoto2.filename = secure_filename(googlePhoto2.filename)
+            googlePhoto2URL = str(upload_file_to_s3(googlePhoto2, "fabrykamruczenia"))
+            found_cat.googlePhoto2 = googlePhoto2URL
+        
+        googlePhoto3 = request.files["3photo"]
+        if googlePhoto3 and allowed_file(googlePhoto3.filename):
+            googlePhoto3.filename = secure_filename(googlePhoto3.filename)
+            googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
+            found_cat.googlePhoto3 = googlePhoto3URL
 
 
         if period == "Rok" and age >= 1:
@@ -314,12 +341,6 @@ def updateCat(id):
             found_cat.readyToBeAdopted = readyToBeAdopted
         if currentlyOnMeds != found_cat.currentlyOnMeds:
             found_cat.currentlyOnMeds = currentlyOnMeds
-        if googlePhoto1 != found_cat.googlePhoto1:
-            found_cat.googlePhoto1 = googlePhoto1
-        if googlePhoto2 != found_cat.googlePhoto2:
-            found_cat.googlePhoto2 = googlePhoto2
-        if googlePhoto3 != found_cat.googlePhoto3:
-            found_cat.googlePhoto3 = googlePhoto3
 
         db.session.commit()
         
