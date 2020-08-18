@@ -238,7 +238,7 @@ def updateAges():
             cat.age += delta
             cat.timestamp = now
         
-        if (cat.period == "Miesiąc" and age >= 3) or (cat.period == "Rok"):
+        if (cat.period == "Miesiąc" and cat.age >= 3) or (cat.period == "Rok"):
             isYoung = False
         else:
             isYoung = True
