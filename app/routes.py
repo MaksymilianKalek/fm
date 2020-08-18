@@ -183,7 +183,7 @@ def addCat():
             googlePhoto3.filename = secure_filename(googlePhoto3.filename)
             googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
 
-        if period == "Rok" and age >= 1:
+        if period == "Miesiąc" and age >= 3:
             isYoung = False
         else:
             isYoung = True
@@ -238,7 +238,7 @@ def updateAges():
             cat.age += delta
             cat.timestamp = now
         
-        if cat.period == "Rok" and cat.age >= 1:
+        if cat.period == "Miesiąc" and cat.age >= 3:
             isYoung = False
         else:
             isYoung = True
@@ -311,7 +311,7 @@ def updateCat(id):
             found_cat.googlePhoto3 = googlePhoto3URL
 
 
-        if period == "Rok" and age >= 1:
+        if period == "Miesiąc" and age >= 3:
             isYoung = False
         else:
             isYoung = True
