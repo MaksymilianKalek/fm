@@ -13,6 +13,7 @@ from app.models import User, Cat
 import shutil
 from time import sleep
 from datetime import datetime
+from helpers import *
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
@@ -162,11 +163,14 @@ def addCat():
 
         file = request.files["picture"]
 
+        # if file and allowed_file(file.filename):
+        #     filename = secure_filename(file.filename)
+        #     file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
+        #     file.save(file_path)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
-            file.save(file_path)
-        
+            file.filename = secure_filename(file.filename)
+            output = str(upload_file_to_s3(file, "fabrykamruczenia"))
+
         if period == "Rok" and age >= 1:
             isYoung = False
         else:
@@ -177,7 +181,7 @@ def addCat():
         else:
             readyToBeAdopted = False
 
-        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=filename, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhoto1, googlePhoto2=googlePhoto2, googlePhoto3=googlePhoto3)
+        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=output, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhoto1, googlePhoto2=googlePhoto2, googlePhoto3=googlePhoto3)
         db.session.add(cat)
         db.session.commit()
 
@@ -261,16 +265,23 @@ def updateCat(id):
         else:
             currentlyOnMeds = False
 
-        file = request.files["picture"]
+        # file = request.files["picture"]
 
+        # if file and allowed_file(file.filename):
+        #     filename = secure_filename(file.filename)
+        #     if filename != found_cat.picture:
+        #         file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
+        #         os.remove(file_path)
+        #         file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
+        #         file.save(file_path)
+        #         found_cat.picture = filename
+
+        file = request.files["picture"]
+        
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            if filename != found_cat.picture:
-                file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
-                os.remove(file_path)
-                file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
-                file.save(file_path)
-                found_cat.picture = filename
+            file.filename = secure_filename(file.filename)
+            output = str(upload_file_to_s3(file, "fabrykamruczenia"))
+
 
         if period == "Rok" and age >= 1:
             isYoung = False

@@ -11,7 +11,7 @@
 
             <div class="card" id="catCard">
                 <a href="/cats/{{ cat.name }}{{ cat.id }}">
-                    <img class="card-img-top" src="/static/uploads/{{ cat.picture }}" alt="Card image cap">
+                    <img class="card-img-top" src="{{ cat.picture }}" alt="Card image cap">
                 </a>
                 <div class="card-body">
                     <h5 class="card-title">{{ cat.name }}</h5>
