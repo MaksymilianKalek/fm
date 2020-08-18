@@ -1,6 +1,9 @@
 import boto3, botocore
 from config import Config
-from aws import key, secret
+try:
+    from aws import key, secret
+except:
+    pass
 
 s3 = boto3.client(
    "s3",
