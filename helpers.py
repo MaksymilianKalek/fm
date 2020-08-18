@@ -1,5 +1,6 @@
 import boto3, botocore
 from config import Config
+import os
 try:
     from aws import key, secret
 except:
