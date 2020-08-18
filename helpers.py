@@ -1,10 +1,11 @@
 import boto3, botocore
 from config import Config
+import aws
 
 s3 = boto3.client(
    "s3",
-   aws_access_key_id="AKIASIAHRIS5QIKHPS7E",
-   aws_secret_access_key="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"
+   aws_access_key_id=os.environ.get("S3_ACCESS_KEY") or aws.key,
+   aws_secret_access_key=os.environ.get("S3_SECRET_ACCESS_KEY") or aws.secret
 )
 
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
