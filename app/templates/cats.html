@@ -10,15 +10,15 @@
         <div class="col-lg d-flex justify-content-center text-center">
 
             <div class="card" id="catCard">
-                <a href="/cats/{{ cat.name }}{{ cat.id }}">
+                <a href="/cats/{{ cat.name }}/{{ cat.id }}">
                     <img class="card-img-top" src="{{ cat.picture }}" alt="Card image cap">
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title">{{ cat.name }}</h5>
+                    <h5 class="card-title">ID: {{ cat.id }}</h5>
                     <hr class="my-4">
                     <p class="card-text">Płeć: {{ cat.sex }}</p>
                     <p class="card-text">Wiek: {{ cat.age }} {{ cat.period }}</p>
-                    <a href="/cats/{{ cat.name }}{{ cat.id }}" class="btn btn-primary">Więcej informacji</a>
+                    <a href="/cats/{{ cat.name }}/{{ cat.id }}" class="btn btn-primary">Więcej informacji</a>
                 </div>
             </div>
 

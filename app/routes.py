@@ -56,10 +56,10 @@ def adopted():
     
     return render_template("adopted.html", title=title, cats=cats_rows)
 
-@app.route("/cats/<string:name><int:id>")
+@app.route("/cats/<string:name>/<int:id>")
 def cat(name, id):
-    found_cat = Cat.query.filter_by(id=id).filter_by(name=name).first()
-    title = f"Fabryka Mruczenia - {name}"
+    found_cat = Cat.query.get(id)
+    title = f"Fabryka Mruczenia - {name} {id}"
     return render_template("cat.html", title=title, cat=found_cat)
 
 @app.route("/ankieta/")
