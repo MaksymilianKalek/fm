@@ -365,11 +365,11 @@ def adoptCat(id):
 def deleteCat(id):
     found_cat = Cat.query.filter_by(id=id).first()
 
-    file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
-    try:
-        os.remove(file_path)
-    except:
-        pass
+    # file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
+    # try:
+    #     os.remove(file_path)
+    # except:
+    #     pass
 
     db.session.delete(found_cat)
     db.session.commit()
