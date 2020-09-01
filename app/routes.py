@@ -96,6 +96,12 @@ def codalej():
     title = "Fabryka Mruczenia - Co dalej?"
     return render_template("codalej.html", title=title)
 
+@app.route("/domtymczasowy/")
+def domtymczasowy():
+    
+    title = "Fabryka Mruczenia - Dom tymczasowy"
+    return render_template("tymczas.html", title=title)
+
 # Back
 
 @app.route("/home/<string:val>")
