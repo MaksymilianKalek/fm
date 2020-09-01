@@ -80,10 +80,31 @@ def adopcja():
     title = "Fabryka Mruczenia - Adopcja"
     return render_template("adopcja.html", title=title)
 
-@app.route("/pomoc/")
-def pomoc(): 
-    title = "Fabryka Mruczenia - Jak nam pomóc"
-    return render_template("pomoc.html", title=title)
+@app.route("/darowizny/")
+def darowizny():
+    
+    title = "Fabryka Mruczenia - Darowizny pieniężne"
+    return render_template("darowizny.html", title=title)
+
+@app.route("/dary/")
+def dary():
+    
+    title = "Fabryka Mruczenia - Dary rzeczowe"
+    return render_template("dary.html", title=title)
+
+@app.route("/bazarek/")
+def bazarek():
+    
+    title = "Fabryka Mruczenia - Mruczący bazarek"
+    return render_template("bazarek.html", title=title)
+
+@app.route("/wirutalnaadopcja/")
+def wirutalnaadopcja():
+    
+    title = "Fabryka Mruczenia - Wirtualna adopcja"
+    return render_template("wirutalnaadopcja.html", title=title)
+
+
 
 @app.route("/contact/")
 def contact():
