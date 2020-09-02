@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
-
 body>div>div:nth-child(1) {
     background-color: white;
 }
@@ -323,7 +322,7 @@ body>div>nav {
     border: none;
 }
 
-#about > div {
+#about>div {
     margin-top: 1rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     border-radius: 15px;
