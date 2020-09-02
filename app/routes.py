@@ -326,18 +326,30 @@ def updateCat(id):
 
         googlePhoto1 = request.files["1photo"]
         if googlePhoto1 and allowed_file(googlePhoto1.filename):
+
+            photo = found_cat.googlePhoto1.split("/")[-1]
+            delete_file_from_s3(photo)
+
             googlePhoto1.filename = secure_filename(googlePhoto1.filename)
             googlePhoto1URL = str(upload_file_to_s3(googlePhoto1, "fabrykamruczenia"))
             found_cat.googlePhoto1 = googlePhoto1URL
 
         googlePhoto2 = request.files["2photo"]
         if googlePhoto2 and allowed_file(googlePhoto2.filename):
+            
+            photo = found_cat.googlePhoto2.split("/")[-1]
+            delete_file_from_s3(photo)
+
             googlePhoto2.filename = secure_filename(googlePhoto2.filename)
             googlePhoto2URL = str(upload_file_to_s3(googlePhoto2, "fabrykamruczenia"))
             found_cat.googlePhoto2 = googlePhoto2URL
         
         googlePhoto3 = request.files["3photo"]
         if googlePhoto3 and allowed_file(googlePhoto3.filename):
+            
+            photo = found_cat.googlePhoto3.split("/")[-1]
+            delete_file_from_s3(photo)
+
             googlePhoto3.filename = secure_filename(googlePhoto3.filename)
             googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
             found_cat.googlePhoto3 = googlePhoto3URL
@@ -404,7 +416,15 @@ def deleteCat(id):
     #     pass
 
     photo = found_cat.picture.split("/")[-1]
+    delete_file_from_s3(photo)
 
+    photo = found_cat.googlePhoto1.split("/")[-1]
+    delete_file_from_s3(photo)
+
+    photo = found_cat.googlePhoto2.split("/")[-1]
+    delete_file_from_s3(photo)
+
+    photo = found_cat.googlePhoto3.split("/")[-1]
     delete_file_from_s3(photo)
     
     db.session.delete(found_cat)
