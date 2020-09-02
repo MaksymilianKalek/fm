@@ -14,6 +14,7 @@ import shutil
 from time import sleep
 from datetime import datetime
 from helpers import *
+import boto3
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
@@ -315,6 +316,10 @@ def updateCat(id):
         file = request.files["picture"]
         
         if file and allowed_file(file.filename):
+
+            photo = found_cat.picture.split("/")[-1]
+            delete_file_from_s3(photo)
+
             file.filename = secure_filename(file.filename)
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
             found_cat.picture = output
@@ -398,6 +403,10 @@ def deleteCat(id):
     # except:
     #     pass
 
+    photo = found_cat.picture.split("/")[-1]
+
+    delete_file_from_s3(photo)
+    
     db.session.delete(found_cat)
     db.session.commit()
     return redirect(url_for("home"))

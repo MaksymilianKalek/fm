@@ -32,3 +32,12 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
         return e
     
     return f"https://fabrykamruczenia.s3.amazonaws.com/{file.filename}"
+
+def delete_file_from_s3(photo):
+
+    s3 = boto3.resource(
+        "s3",
+        aws_access_key_id=os.environ.get("S3_ACCESS_KEY") or key,
+        aws_secret_access_key=os.environ.get("S3_SECRET_ACCESS_KEY") or secret
+    )
+    s3.Object("fabrykamruczenia", photo).delete()
