@@ -14,17 +14,19 @@ import shutil
 from time import sleep
 from datetime import datetime
 from helpers import *
-import boto3
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 # Front
 
+# Route: Landing page
 @app.route("/")
 def start():
     cats = Cat.query.all()
     return render_template("main.html", title="Fabryka Mruczenia", cats=cats)
 
+
+# Route: Lista kotów
 @app.route("/cats/<string:val>")
 def cats(val):
 
@@ -47,6 +49,8 @@ def cats(val):
     
     return render_template("cats.html", title=title, cats=cats_rows)
 
+
+# Route: Lista wyadoptowanych
 @app.route("/adopted/")
 def adopted():
     
@@ -57,75 +61,141 @@ def adopted():
     
     return render_template("adopted.html", title=title, cats=cats_rows)
 
+
+# Route: Strona kota
 @app.route("/cats/<string:name>/<int:id>")
 def cat(name, id):
     found_cat = Cat.query.get(id)
     title = f"Fabryka Mruczenia - {name} {id}"
     return render_template("cat.html", title=title, cat=found_cat)
 
-@app.route("/ankieta/")
-def ankieta():
+
+# Route: Static content
+@app.route("/<string:static>/")
+def content(static):
+
+    txt = static
+
+    try:
+        x = static.split("-")
+        txt = f"{x[0]} {x[1]}"
+    except:
+        pass
+
+    title = f"Fabryka Mruczenia - {txt}"
+    return render_template(f"{static}.html", title=title)
+
+
+
+# BACK-END
+
+# Dopuszczone rozszeszenia plików
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# Funkcja: Adopcja kota
+@app.route("/adopt/<int:id>", methods=["POST", "GET", "UPDATE"])
+@login_required
+def adoptCat(id):
+
+    found_cat = Cat.query.filter_by(id=id).first()
+
+    if found_cat.isActive:
+        found_cat.isActive = False
+    else:
+        found_cat.isActive = True
+
+    db.session.commit()
+    return redirect(url_for("home"))
+
+
+# Funkcja: Update'u wieku kotów
+@app.route("/updateAges/", methods=["GET", "POST"])
+@login_required
+def updateAges():
+   
+    cats = Cat.query.all()
+
+    for cat in cats:
+        if cat.period == "Miesiąc":
+            now = datetime.now()
+            lastUpdate = cat.timestamp
+            delta = now.month - lastUpdate.month
+            delta = int(delta)
+            cat.age += delta
+            if cat.age >= 12:
+                cat.period = "Rok"
+                cat.age = (cat.age / 12)
+            cat.timestamp = now
+
+        elif cat.period == "Tydzień":
+            now = datetime.now()
+            lastUpdate = cat.timestamp
+            delta = now.isocalendar()[1] - lastUpdate.isocalendar()[1]
+            delta = int(delta)
+            cat.age += delta
+            if cat.age >= 8:
+                cat.period = "Miesiąc"
+                cat.age = int(cat.age / 4)
+            cat.timestamp = now
+
+        elif cat.period == "Rok":
+            now = datetime.now()
+            lastUpdate = cat.timestamp
+            delta = now.year - lastUpdate.year
+            delta = int(delta)
+            cat.age += delta
+            cat.timestamp = now
+        
+        if (cat.period == "Miesiąc" and cat.age >= 3) or (cat.period == "Rok"):
+            isYoung = False
+        else:
+            isYoung = True
+
+        if not cat.isYoung and not cat.currentlyOnMeds:
+            readyToBeAdopted = True
+        else:
+            readyToBeAdopted = False
+
     
-    title = "Fabryka Mruczenia - Ankieta"
-    return render_template("ankieta.html", title=title)
+    db.session.commit()
 
-@app.route("/wizyta/")
-def wizyta():
+    return redirect(url_for("home"))
+
+
+# Funkcja: Usunięcie kota
+@app.route("/delete/<int:id>", methods=["POST", "GET", "DELETE"])
+@login_required
+def deleteCat(id):
+    found_cat = Cat.query.filter_by(id=id).first()
+
+    # file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
+    # try:
+    #     os.remove(file_path)
+    # except:
+    #     pass
+
+    photo = found_cat.picture.split("/")[-1]
+    delete_file_from_s3(photo)
+
+    photo = found_cat.googlePhoto1.split("/")[-1]
+    delete_file_from_s3(photo)
+
+    photo = found_cat.googlePhoto2.split("/")[-1]
+    delete_file_from_s3(photo)
+
+    photo = found_cat.googlePhoto3.split("/")[-1]
+    delete_file_from_s3(photo)
     
-    title = "Fabryka Mruczenia - Wizyta Przedadopcyjna"
-    return render_template("wizyta.html", title=title)
-
-@app.route("/adopcja/")
-def adopcja():
-    
-    title = "Fabryka Mruczenia - Adopcja"
-    return render_template("adopcja.html", title=title)
-
-@app.route("/darowizny/")
-def darowizny():
-    
-    title = "Fabryka Mruczenia - Darowizny pieniężne"
-    return render_template("darowizny.html", title=title)
-
-@app.route("/dary/")
-def dary():
-    
-    title = "Fabryka Mruczenia - Dary rzeczowe"
-    return render_template("dary.html", title=title)
-
-@app.route("/bazarek/")
-def bazarek():
-    
-    title = "Fabryka Mruczenia - Mruczący bazarek"
-    return render_template("bazarek.html", title=title)
-
-@app.route("/wirutalnaadopcja/")
-def wirutalnaadopcja():
-    
-    title = "Fabryka Mruczenia - Wirtualna adopcja"
-    return render_template("wirutalnaadopcja.html", title=title)
+    db.session.delete(found_cat)
+    db.session.commit()
+    return redirect(url_for("home"))
 
 
-
-@app.route("/contact/")
-def contact():
-    title = "Fabryka Mruczenia - Kontakt"
-    return render_template("contact.html", title=title)
-
-@app.route("/codalej/")
-def codalej():
-    
-    title = "Fabryka Mruczenia - Co dalej?"
-    return render_template("codalej.html", title=title)
-
-@app.route("/domtymczasowy/")
-def domtymczasowy():
-    
-    title = "Fabryka Mruczenia - Dom tymczasowy"
-    return render_template("tymczas.html", title=title)
-
-# Back
-
+# Route: Lista kotów z filtrami
 @app.route("/home/<string:val>")
 @login_required
 def homeFilter(val):
@@ -147,6 +217,8 @@ def homeFilter(val):
 
     return render_template("home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
 
+
+# Route: Lista kotów ogólna default
 @app.route("/home/")
 @login_required
 def home():
@@ -162,10 +234,8 @@ def home():
     
     return render_template("home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Route: Dodawanie kotów
 @app.route("/addCat/", methods=["GET", "POST"])
 @login_required
 def addCat():
@@ -229,58 +299,8 @@ def addCat():
 
     return render_template("addCat.html", title="Dodaj kotka")
 
-@app.route("/updateAges/", methods=["GET", "POST"])
-@login_required
-def updateAges():
-   
-    cats = Cat.query.all()
 
-    for cat in cats:
-        if cat.period == "Miesiąc":
-            now = datetime.now()
-            lastUpdate = cat.timestamp
-            delta = now.month - lastUpdate.month
-            delta = int(delta)
-            cat.age += delta
-            if cat.age >= 12:
-                cat.period = "Rok"
-                cat.age = (cat.age / 12)
-            cat.timestamp = now
-
-        elif cat.period == "Tydzień":
-            now = datetime.now()
-            lastUpdate = cat.timestamp
-            delta = now.isocalendar()[1] - lastUpdate.isocalendar()[1]
-            delta = int(delta)
-            cat.age += delta
-            if cat.age >= 8:
-                cat.period = "Miesiąc"
-                cat.age = int(cat.age / 4)
-            cat.timestamp = now
-
-        elif cat.period == "Rok":
-            now = datetime.now()
-            lastUpdate = cat.timestamp
-            delta = now.year - lastUpdate.year
-            delta = int(delta)
-            cat.age += delta
-            cat.timestamp = now
-        
-        if (cat.period == "Miesiąc" and cat.age >= 3) or (cat.period == "Rok"):
-            isYoung = False
-        else:
-            isYoung = True
-
-        if not cat.isYoung and not cat.currentlyOnMeds:
-            readyToBeAdopted = True
-        else:
-            readyToBeAdopted = False
-
-    
-    db.session.commit()
-
-    return redirect(url_for("home"))
-
+# Route: Edycja kota
 @app.route("/update/<int:id>", methods=["POST", "GET", "UPDATE"])
 @login_required
 def updateCat(id):
@@ -390,47 +410,8 @@ def updateCat(id):
         
     return render_template("updateCat.html", title="Edytuj kotka", cat=found_cat)
 
-@app.route("/adopt/<int:id>", methods=["POST", "GET", "UPDATE"])
-@login_required
-def adoptCat(id):
 
-    found_cat = Cat.query.filter_by(id=id).first()
-
-    if found_cat.isActive:
-        found_cat.isActive = False
-    else:
-        found_cat.isActive = True
-
-    db.session.commit()
-    return redirect(url_for("home"))
-
-@app.route("/delete/<int:id>", methods=["POST", "GET", "DELETE"])
-@login_required
-def deleteCat(id):
-    found_cat = Cat.query.filter_by(id=id).first()
-
-    # file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
-    # try:
-    #     os.remove(file_path)
-    # except:
-    #     pass
-
-    photo = found_cat.picture.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto1.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto2.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto3.split("/")[-1]
-    delete_file_from_s3(photo)
-    
-    db.session.delete(found_cat)
-    db.session.commit()
-    return redirect(url_for("home"))
-
+# Route: Login
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -446,6 +427,8 @@ def login():
         return redirect("/home/")
     return render_template("login.html", title="Sign In", form=form)
 
+
+# Funkcja: Logout
 @app.route("/logout/")
 def logout():
     logout_user()
