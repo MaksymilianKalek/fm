@@ -91,6 +91,12 @@ body>div>nav {
     border-radius: 5px;
 }
 
+.carousel-caption {
+    color: white;
+    transform: scale(1.2);
+    text-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 1);
+}
+
 .carousel-inner {
     border-radius: 5px;
 }

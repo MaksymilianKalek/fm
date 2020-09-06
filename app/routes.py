@@ -147,15 +147,15 @@ def updateAges():
             delta = int(delta)
             cat.age += delta
         
-        if (cat.period == "Miesiąc" and cat.age >= 3) or (cat.period == "Rok"):
-            isYoung = False
+        if cat.period == "Rok" and cat.age >= 1:
+            cat.isYoung = False
         else:
-            isYoung = True
-
-        if not cat.isYoung and not cat.currentlyOnMeds:
-            readyToBeAdopted = True
+            cat.isYoung = True
+        
+        if ((cat.period == "Miesiąc" and cat.age >= 4) or (cat.period == "Rok")) and (not cat.currentlyOnMeds):
+            cat.readyToBeAdopted = True
         else:
-            readyToBeAdopted = False
+            cat.readyToBeAdopted = False
         
         cat.timestamp = now
 
@@ -257,12 +257,12 @@ def addCat():
                 googlePhotoURL = str(upload_file_to_s3(googlePhoto, "fabrykamruczenia"))
                 googlePhotos.append(googlePhotoURL)
 
-        if (period == "Miesiąc" and age >= 3) or (period == "Rok"):
+        if period == "Rok" and age >= 1:
             isYoung = False
         else:
             isYoung = True
         
-        if not isYoung and not currentlyOnMeds:
+        if ((period == "Miesiąc" and age >= 4) or (period == "Rok")) and (not currentlyOnMeds):
             readyToBeAdopted = True
         else:
             readyToBeAdopted = False
@@ -326,12 +326,12 @@ def updateCat(id):
                 setattr(found_cat, f"googlePhoto{i}", googlePhotoURL)
 
 
-        if (props["period"] == "Miesiąc" and props["age"] >= 3) or (props["period"] == "Rok"):
+        if props["period"] == "Rok" and props["age"] >= 1:
             props["isYoung"] = False
         else:
             props["isYoung"] = True
         
-        if not props["isYoung"] and not props["currentlyOnMeds"]:
+        if ((props["period"] == "Miesiąc" and props["age"] >= 4) or (props["period"] == "Rok")) and (not props["currentlyOnMeds"]):
             props["readyToBeAdopted"] = True
         else:
             props["readyToBeAdopted"] = False
