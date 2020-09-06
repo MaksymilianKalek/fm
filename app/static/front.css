@@ -84,8 +84,8 @@ body>div>nav {
 
 #carouselExampleCaptions {
     margin: auto;
-    margin-top: 2rem;
-    width: 40rem;
+    margin-top: 1rem;
+    width: 62%;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     transition-duration: 0.5s;
     border-radius: 5px;
@@ -93,10 +93,6 @@ body>div>nav {
 
 .carousel-inner {
     border-radius: 5px;
-}
-
-#carouselExampleCaptions:hover {
-    box-shadow: 1rem 1rem 0 rgba(0, 0, 0, 1);
 }
 
 .card {
@@ -139,22 +135,22 @@ body>div>nav {
     background: linear-gradient(0deg, rgba(255, 163, 32, 1) 0%, rgba(236, 125, 36, 1) 100%);
 }
 
-#about {
+.about {
     border: none;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     background-color: white;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
-#about>p,
-#about>h1,
-#about>h1 {
+.about>p,
+.about>h1,
+.about>h1 {
     font-weight: 400;
     color: black;
 }
 
-#about>a>i {
+.about>a>i {
     padding-left: 25px;
     padding-right: 25px;
     color: #fa9921;
@@ -177,11 +173,32 @@ body>div>nav {
     padding-top: 40px;
 }
 
-@media only screen and (max-width: 1200px) {
 
+@media only screen and (min-width: 900px) {
+
+    #profilePhoto {
+        width: 50%;
+    }
+
+    #catProfile>h1 {
+        margin-top: -2rem;
+    }
+
+    #carouselExampleControls {
+        width: 80%;
+        margin: auto;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
 
     #catCard {
         width: 15rem;
+    }
+
+    #carouselExampleCaptions {
+        width: 87%;
     }
 
 }
@@ -217,6 +234,10 @@ body>div>nav {
 
     .card-img-top {
         max-height: 25rem;
+    }
+
+    #carouselExampleCaptions {
+        width: 95%;
     }
 }
 
@@ -265,6 +286,20 @@ body>div>nav {
     .card-img-top {
         max-height: 25rem;
     }
+
+    #carouselExampleCaptions {
+        width: 150%;
+    }
+
+    .sides {
+        display: none;
+    }
+
+    .about {
+        width: 150%;
+        padding: 0 -20px;
+    }
+
 }
 
 @media only screen and (max-width: 360px) {
@@ -305,7 +340,7 @@ body>div>nav {
     border: none;
 }
 
-#about>img {
+.about>img {
     max-width: 100%;
     max-height: 600px;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
@@ -322,7 +357,7 @@ body>div>nav {
     border: none;
 }
 
-#about>div {
+.about>div {
     margin-top: 1rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     border-radius: 15px;
