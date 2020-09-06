@@ -32,18 +32,18 @@ def cats(val):
 
     if val == "kotki":
         cats = Cat.query.filter_by(sex="Kotka").filter_by(isActive=True).all()
-        title = "Fabryka Mruczenia - Kotki"
+        title = "Kotki | Fabryka Mruczenia"
 
     elif val == "koty":
         cats = Cat.query.filter_by(sex="Kot").filter_by(isActive=True).all()
-        title = "Fabryka Mruczenia - Koty"
+        title = "Koty | Fabryka Mruczenia"
 
     elif val == "kociaki":
         cats = Cat.query.filter_by(isYoung=True).filter_by(isActive=True).all()
-        title = "Fabryka Mruczenia - Kociaki"
+        title = "Kociaki | Fabryka Mruczenia"
     else:
         cats = Cat.query.filter_by(isActive=True).all()
-        title = "Fabryka Mruczenia - Nasi podopieczni"
+        title = "Nasi podopieczni | Fabryka Mruczenia"
 
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
     
@@ -55,7 +55,7 @@ def cats(val):
 def adopted():
     
     cats = Cat.query.filter_by(isActive=False).all()
-    title = "Fabryka Mruczenia - Wyadoptowani"
+    title = "Wyadoptowani | Fabryka Mruczenia"
 
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
     
@@ -66,7 +66,7 @@ def adopted():
 @app.route("/cats/<string:name>/<int:id>")
 def cat(name, id):
     found_cat = Cat.query.get(id)
-    title = f"Fabryka Mruczenia - {name}"
+    title = f"{name} | Fabryka Mruczenia"
     return render_template("cat.html", title=title, cat=found_cat)
 
 
@@ -82,7 +82,7 @@ def content(static):
     except:
         pass
 
-    title = f"Fabryka Mruczenia - {txt}"
+    title = f"{txt} | Fabryka Mruczenia"
     return render_template(f"{static}.html", title=title)
 
 
@@ -339,7 +339,6 @@ def updateCat(id):
         for attr, value in props.items():
             if value != getattr(found_cat, attr):
                 setattr(found_cat, attr, value)
-
 
         db.session.commit()
 
