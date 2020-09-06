@@ -66,7 +66,7 @@ def adopted():
 @app.route("/cats/<string:name>/<int:id>")
 def cat(name, id):
     found_cat = Cat.query.get(id)
-    title = f"Fabryka Mruczenia - {name} {id}"
+    title = f"Fabryka Mruczenia - {name}"
     return render_template("cat.html", title=title, cat=found_cat)
 
 
@@ -101,7 +101,7 @@ def allowed_file(filename):
 @login_required
 def adoptCat(id):
 
-    found_cat = Cat.query.filter_by(id=id).first()
+    found_cat = Cat.query.get(id)
 
     if found_cat.isActive:
         found_cat.isActive = False
@@ -119,20 +119,10 @@ def updateAges():
    
     cats = Cat.query.all()
 
-    for cat in cats:
-        if cat.period == "Miesiąc":
-            now = datetime.now()
-            lastUpdate = cat.timestamp
-            delta = now.month - lastUpdate.month
-            delta = int(delta)
-            cat.age += delta
-            if cat.age >= 12:
-                cat.period = "Rok"
-                cat.age = (cat.age / 12)
-            cat.timestamp = now
+    now = datetime.now()
 
-        elif cat.period == "Tydzień":
-            now = datetime.now()
+    for cat in cats:
+        if cat.period == "Tydzień":
             lastUpdate = cat.timestamp
             delta = now.isocalendar()[1] - lastUpdate.isocalendar()[1]
             delta = int(delta)
@@ -140,15 +130,22 @@ def updateAges():
             if cat.age >= 8:
                 cat.period = "Miesiąc"
                 cat.age = int(cat.age / 4)
-            cat.timestamp = now
+
+        elif cat.period == "Miesiąc":
+            lastUpdate = cat.timestamp
+            delta = now.month - lastUpdate.month
+            delta = int(delta)
+            cat.age += delta
+            if cat.age >= 12:
+                cat.period = "Rok"
+                cat.age = int(cat.age / 12)
+            lastUpdate = cat.timestamp            
 
         elif cat.period == "Rok":
-            now = datetime.now()
             lastUpdate = cat.timestamp
             delta = now.year - lastUpdate.year
             delta = int(delta)
             cat.age += delta
-            cat.timestamp = now
         
         if (cat.period == "Miesiąc" and cat.age >= 3) or (cat.period == "Rok"):
             isYoung = False
@@ -159,6 +156,8 @@ def updateAges():
             readyToBeAdopted = True
         else:
             readyToBeAdopted = False
+        
+        cat.timestamp = now
 
     
     db.session.commit()
@@ -170,25 +169,12 @@ def updateAges():
 @app.route("/delete/<int:id>", methods=["POST", "GET", "DELETE"])
 @login_required
 def deleteCat(id):
-    found_cat = Cat.query.filter_by(id=id).first()
+    found_cat = Cat.query.get(id)
 
-    # file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
-    # try:
-    #     os.remove(file_path)
-    # except:
-    #     pass
-
-    photo = found_cat.picture.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto1.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto2.split("/")[-1]
-    delete_file_from_s3(photo)
-
-    photo = found_cat.googlePhoto3.split("/")[-1]
-    delete_file_from_s3(photo)
+    photos = [found_cat.picture.split("/")[-1], found_cat.googlePhoto1.split("/")[-1], found_cat.googlePhoto2.split("/")[-1], found_cat.googlePhoto3.split("/")[-1]]
+    
+    for photo in photos:
+        delete_file_from_s3(photo)
     
     db.session.delete(found_cat)
     db.session.commit()
@@ -258,28 +244,18 @@ def addCat():
 
         file = request.files["picture"]
 
-        # if file and allowed_file(file.filename):
-        #     filename = secure_filename(file.filename)
-        #     file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
-        #     file.save(file_path)
         if file and allowed_file(file.filename):
             file.filename = secure_filename(file.filename)
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
 
-        googlePhoto1 = request.files["1photo"]
-        if googlePhoto1 and allowed_file(googlePhoto1.filename):
-            googlePhoto1.filename = secure_filename(googlePhoto1.filename)
-            googlePhoto1URL = str(upload_file_to_s3(googlePhoto1, "fabrykamruczenia"))
+        googlePhotos = []
 
-        googlePhoto2 = request.files["2photo"]
-        if googlePhoto2 and allowed_file(googlePhoto2.filename):
-            googlePhoto2.filename = secure_filename(googlePhoto2.filename)
-            googlePhoto2URL = str(upload_file_to_s3(googlePhoto2, "fabrykamruczenia"))
-        
-        googlePhoto3 = request.files["3photo"]
-        if googlePhoto3 and allowed_file(googlePhoto3.filename):
-            googlePhoto3.filename = secure_filename(googlePhoto3.filename)
-            googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
+        for i in range(1, 4):
+            googlePhoto = request.files[f"{i}photo"]
+            if googlePhoto and allowed_file(googlePhoto.filename):
+                googlePhoto.filename = secure_filename(googlePhoto.filename)
+                googlePhotoURL = str(upload_file_to_s3(googlePhoto, "fabrykamruczenia"))
+                googlePhotos.append(googlePhotoURL)
 
         if (period == "Miesiąc" and age >= 3) or (period == "Rok"):
             isYoung = False
@@ -291,7 +267,7 @@ def addCat():
         else:
             readyToBeAdopted = False
 
-        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=output, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhoto1URL, googlePhoto2=googlePhoto2URL, googlePhoto3=googlePhoto3URL)
+        cat = Cat(name=name, description=description, age=age, period=period, sex=sex, fur=fur, when_came=when_came, picture=output, isYoung=isYoung, readyToBeAdopted=readyToBeAdopted, currentlyOnMeds=currentlyOnMeds, googlePhoto1=googlePhotos[0], googlePhoto2=googlePhotos[1], googlePhoto3=googlePhotos[2])
         db.session.add(cat)
         db.session.commit()
 
@@ -301,37 +277,29 @@ def addCat():
 
 
 # Route: Edycja kota
-@app.route("/update/<int:id>", methods=["POST", "GET", "UPDATE"])
+@app.route("/update/<int:id>", methods=["POST", "GET"])
 @login_required
 def updateCat(id):
     found_cat = Cat.query.filter_by(id=id).first()
+    backup = found_cat
 
     if request.method == "POST":
-        name = request.form["name"]
-        age = request.form["age"]
-        age = int(age)
-        sex = request.form["sex"]
-        period = request.form["period"]
-        fur = request.form["fur"]
-        when_came = request.form["when_came"]
-        description = request.form["description"]
-        currentlyOnMeds = request.form["currentlyOnMeds"]
 
-        if currentlyOnMeds == "Tak":
-            currentlyOnMeds = True
+        props = {
+            "name": request.form["name"],
+            "age": int(request.form["age"]),
+            "period": request.form["period"],
+            "sex": request.form["sex"], 
+            "fur": request.form["fur"],
+            "when_came": request.form["when_came"],
+            "description": request.form["description"],
+            "currentlyOnMeds": request.form["currentlyOnMeds"],            
+            }
+
+        if props["currentlyOnMeds"] == "Tak":
+            props["currentlyOnMeds"] = True
         else:
-            currentlyOnMeds = False
-
-        # file = request.files["picture"]
-
-        # if file and allowed_file(file.filename):
-        #     filename = secure_filename(file.filename)
-        #     if filename != found_cat.picture:
-        #         file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), found_cat.picture)
-        #         os.remove(file_path)
-        #         file_path = os.path.join(join(dirname(realpath(__file__)), 'static/uploads/'), filename)
-        #         file.save(file_path)
-        #         found_cat.picture = filename
+            props["currentlyOnMeds"] = False
 
         file = request.files["picture"]
         
@@ -344,70 +312,39 @@ def updateCat(id):
             output = str(upload_file_to_s3(file, "fabrykamruczenia"))
             found_cat.picture = output
 
-        googlePhoto1 = request.files["1photo"]
-        if googlePhoto1 and allowed_file(googlePhoto1.filename):
+        googlePhotos = [found_cat.googlePhoto1, found_cat.googlePhoto1, found_cat.googlePhoto1]
 
-            photo = found_cat.googlePhoto1.split("/")[-1]
-            delete_file_from_s3(photo)
+        for i in range(1, 4):
+            googlePhoto = request.files[f"{i}photo"]
+            if googlePhoto and allowed_file(googlePhoto.filename):
 
-            googlePhoto1.filename = secure_filename(googlePhoto1.filename)
-            googlePhoto1URL = str(upload_file_to_s3(googlePhoto1, "fabrykamruczenia"))
-            found_cat.googlePhoto1 = googlePhoto1URL
+                photo = googlePhotos[i - 1].split("/")[-1]
+                delete_file_from_s3(photo)
 
-        googlePhoto2 = request.files["2photo"]
-        if googlePhoto2 and allowed_file(googlePhoto2.filename):
-            
-            photo = found_cat.googlePhoto2.split("/")[-1]
-            delete_file_from_s3(photo)
-
-            googlePhoto2.filename = secure_filename(googlePhoto2.filename)
-            googlePhoto2URL = str(upload_file_to_s3(googlePhoto2, "fabrykamruczenia"))
-            found_cat.googlePhoto2 = googlePhoto2URL
-        
-        googlePhoto3 = request.files["3photo"]
-        if googlePhoto3 and allowed_file(googlePhoto3.filename):
-            
-            photo = found_cat.googlePhoto3.split("/")[-1]
-            delete_file_from_s3(photo)
-
-            googlePhoto3.filename = secure_filename(googlePhoto3.filename)
-            googlePhoto3URL = str(upload_file_to_s3(googlePhoto3, "fabrykamruczenia"))
-            found_cat.googlePhoto3 = googlePhoto3URL
+                googlePhoto.filename = secure_filename(googlePhoto.filename)
+                googlePhotoURL = str(upload_file_to_s3(googlePhoto, "fabrykamruczenia"))
+                setattr(found_cat, f"googlePhoto{i}", googlePhotoURL)
 
 
-        if (period == "Miesiąc" and age >= 3) or (period == "Rok"):
-            isYoung = False
+        if (props["period"] == "Miesiąc" and props["age"] >= 3) or (props["period"] == "Rok"):
+            props["isYoung"] = False
         else:
-            isYoung = True
+            props["isYoung"] = True
         
-        if not isYoung and not currentlyOnMeds:
-            readyToBeAdopted = True
+        if not props["isYoung"] and not props["currentlyOnMeds"]:
+            props["readyToBeAdopted"] = True
         else:
-            readyToBeAdopted = False
-        
-        if period != found_cat.period:
-            found_cat.period = period
-        if name != found_cat.name:
-            found_cat.name = name
-        if age != found_cat.age:
-            found_cat.age = age
-        if sex != found_cat.sex:
-            found_cat.sex = sex
-        if fur != found_cat.fur:
-            found_cat.fur = fur
-        if when_came != found_cat.when_came:
-            found_cat.when_came = when_came
-        if description != found_cat.description:
-            found_cat.description = description
-        if isYoung != found_cat.isYoung:
-            found_cat.isYoung = isYoung
-        if readyToBeAdopted != found_cat.readyToBeAdopted:
-            found_cat.readyToBeAdopted = readyToBeAdopted
-        if currentlyOnMeds != found_cat.currentlyOnMeds:
-            found_cat.currentlyOnMeds = currentlyOnMeds
+            props["readyToBeAdopted"] = False
+                
+        for attr, value in props.items():
+            if value != getattr(found_cat, attr):
+                setattr(found_cat, attr, value)
+
 
         db.session.commit()
-        
+
+        return redirect(url_for("home"))
+
     return render_template("updateCat.html", title="Edytuj kotka", cat=found_cat)
 
 
