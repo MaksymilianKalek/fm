@@ -175,7 +175,15 @@ body>div>nav {
 }
 
 #about {
-    margin-top: 2rem;
+    border: none;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    background-color: white;
+    margin-top: 1rem;
+}
+
+.fa-3x {
+    margin: 0 10px;
 }
 
 .about>p,

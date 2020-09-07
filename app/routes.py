@@ -25,8 +25,10 @@ def search(val):
     title="Wyniki wyszukiwania | Fabryka Mruczenia"
 
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
+
+    noCats = True if len(cats) == 0 else False
     
-    return render_template("cats.html", title=title, cats=cats_rows)
+    return render_template("cats.html", title=title, cats=cats_rows, noCats=noCats)
 
 # Route: Landing page
 @app.route("/")
@@ -53,10 +55,12 @@ def cats(val):
     else:
         cats = Cat.query.filter_by(isActive=True).all()
         title = "Nasi podopieczni | Fabryka Mruczenia"
-        
+
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
+
+    noCats = True if len(cats) == 0 else False
     
-    return render_template("cats.html", title=title, cats=cats_rows)
+    return render_template("cats.html", title=title, cats=cats_rows, noCats=noCats)
 
 
 # Route: Lista wyadoptowanych
