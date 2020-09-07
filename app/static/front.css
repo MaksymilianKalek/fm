@@ -82,6 +82,10 @@ body>div>nav {
     z-index: 1;
 }
 
+.jumbotron {
+    background-color: white;
+}
+
 #searchXXX {
     transition-duration: 0.2s;
     font-family: 'Amatic SC', Helvetica, cursive;
