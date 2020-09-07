@@ -10,7 +10,7 @@ body {
 }
 
 .top-text {
-    font-family: 'Amatic SC', cursive;
+    font-family: 'Amatic SC', Helvetica, cursive;
     font-size: 4.5rem;
 
 }
@@ -44,7 +44,7 @@ body {
 
 #navbarDropdown,
 #navbarSupportedContent>ul>li>a {
-    font-family: 'Amatic SC', cursive;
+    font-family: 'Amatic SC', Helvetica, cursive;
     font-weight: bold;
     font-size: 1.5rem;
     color: white;
@@ -84,7 +84,7 @@ body>div>nav {
 
 #searchXXX {
     transition-duration: 0.2s;
-    font-family: 'Amatic SC', cursive;
+    font-family: 'Amatic SC', Helvetica, cursive;
     font-weight: bold;
     font-size: 1.3rem;
 }
@@ -95,7 +95,7 @@ body>div>nav {
 }
 
 #search {
-    font-family: 'Amatic SC', cursive;
+    font-family: 'Amatic SC', Helvetica, cursive;
     font-weight: bold;
     font-size: 1.5rem;
     height: 40px;
