@@ -19,6 +19,15 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 # Front
 
+@app.route("/search/<string:val>")
+def search(val):
+    cats = Cat.query.filter(Cat.name.contains(val)).all()
+    title="Wyniki wyszukiwania | Fabryka Mruczenia"
+
+    cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
+    
+    return render_template("cats.html", title=title, cats=cats_rows)
+
 # Route: Landing page
 @app.route("/")
 def start():
@@ -27,7 +36,7 @@ def start():
 
 
 # Route: Lista kotów
-@app.route("/cats/<string:val>")
+@app.route("/cats/<string:val>", methods=["GET", "POST"])
 def cats(val):
 
     if val == "kotki":
@@ -44,7 +53,7 @@ def cats(val):
     else:
         cats = Cat.query.filter_by(isActive=True).all()
         title = "Nasi podopieczni | Fabryka Mruczenia"
-
+        
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
     
     return render_template("cats.html", title=title, cats=cats_rows)
