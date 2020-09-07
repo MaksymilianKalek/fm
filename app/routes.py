@@ -21,6 +21,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 @app.route("/search/<string:val>")
 def search(val):
+    val = val.capitalize()
     cats = Cat.query.filter(Cat.name.contains(val)).all()
     title="Wyniki wyszukiwania | Fabryka Mruczenia"
 
