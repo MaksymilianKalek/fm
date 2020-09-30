@@ -144,6 +144,14 @@ body>div>nav {
     width: 18rem;
 }
 
+#adoptedCard {
+    height: 325px;
+}
+
+#adoptedRow {
+    height: 400px
+}
+
 .card-img-top {
     height: 100%;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
@@ -430,8 +438,4 @@ body>div>nav {
     margin-top: 1rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     border-radius: 15px;
-}
-
-#adoptedCard {
-    height: 325px;
 }
