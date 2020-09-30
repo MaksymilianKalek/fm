@@ -365,7 +365,7 @@ def updateCat(id):
 
 
 # Route: Login
-@app.route("/login/", methods=["GET", "POST"])
+@app.route("/login/", methods=["POST", "GET"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
@@ -388,14 +388,13 @@ def logout():
     return redirect(url_for("login"))
 
 # Route: Zmiana hasła
-@app.route("/changePassword/")
+@app.route("/changePassword/", methods=["GET", "POST"])
 @login_required
 def changePassword():
-
-    username = request.form["username"]
-    password = request.form["password"]
-
-    current_user.username = username
-    current_user.set_password(password)
-
-    return render_template("changePassword.html", title="Change password", username=username)
+     if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        current_user.username = username
+        current_user.set_password(password)
+        db.session.commit()
+     return render_template("changePassword.html", title="Change password", username=current_user.username)
