@@ -122,7 +122,9 @@
                     <input class="form-control mr-sm-2" type="search" id="search" name="search"
                         placeholder="Wyszukaj Kotka" aria-label="Wyszukaj Kotka" required>
                     <a href="#" id="searchBtn" onclick="
-                    document.getElementById('searchBtn').href = '/search/' + document.getElementById('search').value;">
+                    if (document.getElementById('search').value) {
+                        document.getElementById('searchBtn').href = '/search/' + document.getElementById('search').value;
+                    }">
                         <button class="btn btn-outline-light my-2 my-sm-0" id="searchXXX">Szukaj</button></a>
                 </ul>
             </div>
