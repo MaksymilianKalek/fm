@@ -2,7 +2,6 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
 from werkzeug.urls import url_parse
 from PIL import Image
 import PIL
@@ -387,3 +386,16 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("login"))
+
+# Route: Zmiana hasła
+@app.route("/changePassword/")
+@login_required
+def changePassword():
+
+    username = request.form["username"]
+    password = request.form["password"]
+
+    current_user.username = username
+    current_user.set_password(password)
+
+    return render_template("changePassword.html", title="Change password", username=username)
