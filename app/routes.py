@@ -84,7 +84,7 @@ def cat(name, id):
 
 
 # Route: Static content
-@app.route("/<string:static>/")
+@app.route("/page/<string:static>/")
 def content(static):
 
     txt = static
@@ -394,7 +394,12 @@ def changePassword():
      if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        current_user.username = username
-        current_user.set_password(password)
-        db.session.commit()
+        confirm_password = request.form["confirm_password"]
+
+        if confirm_password == password:
+            current_user.username = username
+            current_user.set_password(password)
+            db.session.commit()
+            return(redirect(url_for("home")))
+            
      return render_template("changePassword.html", title="Change password", username=current_user.username)
