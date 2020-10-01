@@ -369,6 +369,11 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     form = LoginForm()
+    # if request.method == "POST":
+    #     user = User.query.filter_by(username="admin").first()
+    #     user.set_password("admin")
+    #     db.session.commit()
+    #     return render_template("main.html", title="Fabryka")
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -390,7 +395,8 @@ def logout():
 @app.route("/changePassword/", methods=["GET", "POST"])
 @login_required
 def changePassword():
-     if request.method == "POST":
+    changed = ""
+    if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
@@ -400,5 +406,6 @@ def changePassword():
             current_user.set_password(password)
             db.session.commit()
             return(redirect(url_for("home")))
+        changed = "Password wasn't changed"
             
-     return render_template("changePassword.html", title="Change password", username=current_user.username)
+    return render_template("changePassword.html", title="Change password", username=current_user.username, changed=changed)
