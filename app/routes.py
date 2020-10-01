@@ -13,6 +13,7 @@ import shutil
 from time import sleep
 from datetime import datetime
 from helpers import *
+from sqlalchemy import asc
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
@@ -42,18 +43,18 @@ def start():
 def cats(val):
 
     if val == "kotki":
-        cats = Cat.query.filter_by(sex="Kotka").filter_by(isActive=True).all()
+        cats = Cat.query.filter_by(sex="Kotka").filter_by(isActive=True).order_by(asc(Cat.name)).all()
         title = "Kotki | Fabryka Mruczenia"
 
     elif val == "koty":
-        cats = Cat.query.filter_by(sex="Kot").filter_by(isActive=True).all()
+        cats = Cat.query.filter_by(sex="Kot").filter_by(isActive=True).order_by(asc(Cat.name)).all()
         title = "Koty | Fabryka Mruczenia"
 
     elif val == "kociaki":
-        cats = Cat.query.filter_by(isYoung=True).filter_by(isActive=True).all()
+        cats = Cat.query.filter_by(isYoung=True).filter_by(isActive=True).order_by(asc(Cat.name)).all()
         title = "Kociaki | Fabryka Mruczenia"
     else:
-        cats = Cat.query.filter_by(isActive=True).all()
+        cats = Cat.query.filter_by(isActive=True).order_by(asc(Cat.name)).all()
         title = "Nasi podopieczni | Fabryka Mruczenia"
 
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
@@ -67,7 +68,7 @@ def cats(val):
 @app.route("/adopted/")
 def adopted():
     
-    cats = Cat.query.filter_by(isActive=False).all()
+    cats = Cat.query.filter_by(isActive=False).order_by(asc(Cat.name)).all()
     title = "Wyadoptowani | Fabryka Mruczenia"
 
     cats_rows = [cats[i:i+4] for i in range(0, len(cats),4)]
@@ -203,12 +204,12 @@ def deleteCat(id):
 def homeFilter(val):
     if val == "active":
         val = True
-        cats = Cat.query.filter_by(isActive=val).all()
+        cats = Cat.query.filter_by(isActive=val).order_by(asc(Cat.name)).all()
     elif val == "notActive":
         val = False
-        cats = Cat.query.filter_by(isActive=val).all()
+        cats = Cat.query.filter_by(isActive=val).order_by(asc(Cat.name)).all()
     else:
-        cats = Cat.query.all()
+        cats = Cat.query.order_by(asc(Cat.name)).all()
 
     if len(cats) == 0:
         noCats = True
@@ -225,7 +226,7 @@ def homeFilter(val):
 @login_required
 def home():
 
-    cats = Cat.query.filter_by(isActive=True).all()
+    cats = Cat.query.filter_by(isActive=True).order_by(asc(Cat.name)).all()
 
     if len(cats) == 0:
         noCats = True
