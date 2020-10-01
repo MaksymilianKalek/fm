@@ -102,12 +102,6 @@ def content(static):
     title = f"{txt} | Fabryka Mruczenia"
     return render_template(f"{static}.html", title=title)
 
-# Route: robots.txt
-@app.route("/robots.txt")
-def robots():
-    return render_template("robots.txt", title="Robots.txt | Fabryka Mruczenia")
-
-
 
 # BACK-END
 
