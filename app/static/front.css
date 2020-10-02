@@ -140,9 +140,10 @@ body>div>nav {
     text-decoration: none;
 }
 
-#catCard {
+#catCard, #adoptedCard {
     text-decoration: none;
     width: 18rem;
+    padding-top: 10px;
 }
 
 #adoptedCard {
@@ -271,7 +272,7 @@ body>div>nav {
 
 @media only screen and (max-width: 1200px) {
 
-    #catCard {
+    #catCard, #adoptedCard {
         width: 15rem;
     }
 
@@ -287,11 +288,15 @@ body>div>nav {
         height: 100%;
     }
 
-    #catCard {
+    #catCard, #adoptedCard {
         margin-bottom: 40px;
         width: 35rem;
         height: 40.5rem;
         transform: scale(0.95);
+    }
+
+    #adoptedCard {
+        height: 475px;
     }
 
     .card-img-top {
@@ -305,9 +310,13 @@ body>div>nav {
         transform: scale(0.8);
     }
 
-    #catCard {
+    #catCard, #adoptedCard {
         width: 30rem;
         height: 36rem;
+    }
+
+    #adoptedCard {
+        height: 425px;
     }
 
     .card-img-top {
@@ -346,19 +355,27 @@ body>div>nav {
         height: 160px;
     }
 
-    #catCard {
+    #catCard, #adoptedCard {
         width: 25rem;
         height: 36rem;
         transform: scale(0.95);
     }
 
+    #adoptedCard {
+        height: 375px;
+    }
+
 }
 
 @media only screen and (max-width: 460px) {
-    #catCard {
+    #catCard, #adoptedCard {
         width: 25rem;
         height: 32rem;
         transform: scale(0.9);
+    }
+
+    #adoptedCard {
+        height: 375px;
     }
 
     .card-img-top {
@@ -405,10 +422,6 @@ body>div>nav {
         margin-right: -2rem;
         transform: scale(0.65);
     }
-}
-
-#catCard {
-    padding-top: 10px;
 }
 
 .cats {
