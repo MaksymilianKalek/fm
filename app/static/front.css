@@ -215,7 +215,7 @@ body>div>nav {
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     clear: both;
     position: relative;
-    height: 100px;
+    height: 80px;
     margin-top: 0px;
 }
 
@@ -375,6 +375,10 @@ body>div>nav {
     .about {
         width: 150%;
         padding: 0 -20px;
+    }
+
+    .footer {
+        height: 100px;
     }
 
 }
