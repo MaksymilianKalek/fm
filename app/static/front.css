@@ -7,6 +7,7 @@ body>div>div:nth-child(1) {
 
 body {
     font-family: 'Open Sans', Helvetica, sans-serif;
+    min-height: 100%;
 }
 
 .top-text {
@@ -186,13 +187,13 @@ body>div>nav {
     margin-top: 1rem;
 }
 
-#about {
+/* #about {
     border: none;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     background-color: white;
     margin-top: 1rem;
-}
+} */
 
 .fa-3x {
     margin: 0 10px;
@@ -201,7 +202,6 @@ body>div>nav {
 .about>p,
 .about>h1,
 .about>h1 {
-    font-weight: 400;
     color: black;
 }
 
@@ -217,6 +217,10 @@ body>div>nav {
     padding-bottom: 1rem;
     color: black;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    clear: both;
+    position: relative;
+    height: 100px;
+    margin-top: 0px;
 }
 
 .container-fluid {

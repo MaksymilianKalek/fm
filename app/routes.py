@@ -101,7 +101,7 @@ def content(static):
         pass
 
     title = f"{txt} | Fabryka Mruczenia"
-    return render_template(f"{static}.html", title=title)
+    return render_template(f"/static/{static}.html", title=title)
 
 
 # BACK-END
