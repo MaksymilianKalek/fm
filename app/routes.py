@@ -35,7 +35,7 @@ def search(val):
 @app.route("/")
 def start():
     cats = Cat.query.all()
-    return render_template("main.html", title="Fabryka Mruczenia", cats=cats)
+    return render_template("index.html", title="Fabryka Mruczenia", cats=cats)
 
 
 # Route: Lista kotów
@@ -218,7 +218,7 @@ def homeFilter(val):
 
     howManyCats = len(cats)
 
-    return render_template("home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
+    return render_template("back/home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
 
 
 # Route: Lista kotów ogólna default
@@ -235,7 +235,7 @@ def home():
 
     howManyCats = len(cats)
     
-    return render_template("home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
+    return render_template("back/home.html", title="Zarządzaj kotkami", cats=cats, noCats=noCats, howManyCats=howManyCats)
 
 
 # Route: Dodawanie kotów
@@ -290,7 +290,7 @@ def addCat():
 
         return redirect(url_for("home"))
 
-    return render_template("addCat.html", title="Dodaj kotka")
+    return render_template("back/addCat.html", title="Dodaj kotka")
 
 
 # Route: Edycja kota
@@ -361,7 +361,7 @@ def updateCat(id):
 
         return redirect(url_for("home"))
 
-    return render_template("updateCat.html", title="Edytuj kotka", cat=found_cat)
+    return render_template("back/updateCat.html", title="Edytuj kotka", cat=found_cat)
 
 
 # Route: Login
@@ -383,7 +383,7 @@ def login():
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect("/home/")
-    return render_template("login.html", title="Sign In", form=form)
+    return render_template("back/login.html", title="Sign In", form=form)
 
 
 # Funkcja: Logout
@@ -409,4 +409,4 @@ def changePassword():
             return(redirect(url_for("home")))
         changed = "Password wasn't changed"
             
-    return render_template("changePassword.html", title="Change password", username=current_user.username, changed=changed)
+    return render_template("back/changePassword.html", title="Change password", username=current_user.username, changed=changed)

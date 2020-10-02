@@ -187,14 +187,6 @@ body>div>nav {
     margin-top: 1rem;
 }
 
-/* #about {
-    border: none;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-    background-color: white;
-    margin-top: 1rem;
-} */
-
 .fa-3x {
     margin: 0 10px;
 }
@@ -203,6 +195,10 @@ body>div>nav {
 .about>h1,
 .about>h1 {
     color: black;
+}
+
+.about>p {
+    font-size: 1rem;
 }
 
 .about>a>i {
